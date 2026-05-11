@@ -235,7 +235,10 @@ body.light-mode .portfolio-content .layer a i {
 }
 
 .navbar a:hover {
-    color: aqua;
+    border: 2px solid #00ffff;
+    border-radius: 8px;
+    padding: 5px 15px;
+    transition: 0.3s ease;
 }
 
 .nav-utils {
@@ -309,6 +312,11 @@ body.light-mode .portfolio-content .layer a i {
     color: cyan;
 }
 
+.text {
+    color: white;
+    text-shadow: 0 0 15px cyan, 0 0 25px cyan;
+}
+
 .home-content h3:nth-of-type(2) {
     margin-bottom: 30px;
     animation: slideTop 1s ease forwards;
@@ -320,8 +328,8 @@ body.light-mode .portfolio-content .layer a i {
     font-weight: 700;
     margin: -3px 0;
     opacity: 0;
-    animation: slideBottom 1s ease forwards;
-    animation-delay: 1s;
+    animation: slideBottom 1s ease forwards, colorBlink 4s infinite;
+    animation-delay: 1s, 2s;
 }
 
 .home-content p {
@@ -405,6 +413,38 @@ body.light-mode .portfolio-content .layer a i {
     100% {
         opacity: 1;
         transform: translateY(0px);
+    }
+}
+
+@keyframes colorBlink {
+    0% {
+        color: #ffffff;
+        /* Start White */
+        text-shadow: 0 0 10px #ffffff;
+    }
+
+    25% {
+        color: hsl(64, 100%, 50%);
+        /* Cyan */
+        text-shadow: 0 0 20px hsl(64, 100%, 50%);
+    }
+
+    50% {
+        color: #39FF14;
+        /* Neon Green */
+        text-shadow: 0 0 20px #39FF14;
+    }
+
+    75% {
+        color: orange;
+        /* Magenta */
+        text-shadow: 0 0 20px orange;
+    }
+
+    100% {
+        color: #ffffff;
+        /* Back to White */
+        text-shadow: 0 0 10px #ffffff;
     }
 }
 
