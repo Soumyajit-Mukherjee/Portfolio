@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://unpkg.com/typed.js@2.0.15/dist/typed.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body>
@@ -420,13 +421,16 @@
         </div>
 
         <div class="contact-form">
-            <form action="">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Your Email" required>
-                <input type="text" placeholder="Your Phone" required>
-                <textarea placeholder="Enter your message" required></textarea>
-                <input type="submit" value="Send Message →" class="btn-box">
+            <form id="contact-form">
+                <input type="text" id="from_name" placeholder="Your Name" required>
+                <input type="email" id="from_email" placeholder="Your Email" required>
+                <input type="text" id="from_phone" placeholder="Your Phone" required>
+                <textarea id="message" placeholder="Enter your message" required></textarea>
+                <button type="submit" class="btn-box" id="submit-btn">
+                    Send Message →
+                </button>
             </form>
+            <p id="form-status"></p>
         </div>
     </section>
 

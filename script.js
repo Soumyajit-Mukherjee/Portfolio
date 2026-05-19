@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================================
     // 2. DOM LOADED EVENTS (Observer & Theme Toggle)
     // ==========================================
-    
+
     // --- SKILLS OBSERVER ---
     const skillsSection = document.getElementById('skills');
 
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, {
             threshold: 0.3
         });
-        
+
         observer.observe(skillsSection);
     }
 
@@ -95,6 +95,50 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize the clock immediately upon DOM load, then set the interval
     updateClock();
     setInterval(updateClock, 1000);
+
+    // ==========================================
+    // CONTACT FORM — EmailJS
+    // ==========================================
+    emailjs.init("wo5aY7tF6c_Z5-ReB");
+
+    const contactForm = document.getElementById("contact-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const formStatus = document.getElementById("form-status");
+
+    if (contactForm) {
+        contactForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Show loading state
+            submitBtn.textContent = "Sending...";
+            submitBtn.disabled = true;
+            formStatus.textContent = "";
+            formStatus.className = "";
+
+            const templateParams = {
+                from_name: document.getElementById("from_name").value,
+                from_email: document.getElementById("from_email").value,
+                from_phone: document.getElementById("from_phone").value,
+                message: document.getElementById("message").value,
+            };
+
+            emailjs.send("service_9f2k6kd", "template_a444dcs", templateParams)
+                .then(() => {
+                    formStatus.textContent = "Message sent! I'll get back to you soon.";
+                    formStatus.className = "form-success";
+                    contactForm.reset();
+                    submitBtn.textContent = "Send Message →";
+                    submitBtn.disabled = false;
+                })
+                .catch((error) => {
+                    console.error("EmailJS error:", error);
+                    formStatus.textContent = "Something went wrong. Please try again.";
+                    formStatus.className = "form-error";
+                    submitBtn.textContent = "Send Message →";
+                    submitBtn.disabled = false;
+                });
+        });
+    }
 });
 
 // ==========================================
@@ -115,7 +159,7 @@ const stars = [];
 const numStars = 150; // Change this to add more or fewer stars
 
 // Colors matching your neon theme
-const colors = ["#00ffff", "#ff0077", "#ffff00", "#ffffff"]; 
+const colors = ["#00ffff", "#ff0077", "#ffff00", "#ffffff"];
 
 // Create the stars
 for (let i = 0; i < numStars; i++) {
@@ -163,23 +207,23 @@ function animateStars() {
 animateStars();
 
 // --- HAMBURGER MENU TOGGLE ---
-    const menuIcon = document.getElementById('menu-icon');
-    const navbar = document.querySelector('.navbar');
+const menuIcon = document.getElementById('menu-icon');
+const navbar = document.querySelector('.navbar');
 
-    if (menuIcon && navbar) {
-        menuIcon.addEventListener('click', () => {
-            // Toggle the 'bx-x' class to change the icon to an X
-            menuIcon.classList.toggle('bx-x');
-            // Toggle the 'active' class to show/hide the menu
-            navbar.classList.toggle('active');
-        });
+if (menuIcon && navbar) {
+    menuIcon.addEventListener('click', () => {
+        // Toggle the 'bx-x' class to change the icon to an X
+        menuIcon.classList.toggle('bx-x');
+        // Toggle the 'active' class to show/hide the menu
+        navbar.classList.toggle('active');
+    });
 
-        // Close menu when a link is clicked
-        const navLinks = document.querySelectorAll('.navbar a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuIcon.classList.remove('bx-x');
-                navbar.classList.remove('active');
-            });
+    // Close menu when a link is clicked
+    const navLinks = document.querySelectorAll('.navbar a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            menuIcon.classList.remove('bx-x');
+            navbar.classList.remove('active');
         });
-    }
+    });
+}

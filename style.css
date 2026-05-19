@@ -379,6 +379,32 @@ body.light-mode .contact-form form textarea {
 }
 
 /* ==========================================
+   CONTACT FORM
+   ========================================== */
+
+#form-status {
+    text-align: center;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 8px 0;
+}
+
+#form-status.form-success {
+    color: #39FF14;
+}
+
+#form-status.form-error {
+    color: #ff0077;
+}
+
+#submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================
    HOME SECTION
    ========================================== */
 .home {
