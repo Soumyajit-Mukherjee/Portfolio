@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             emailjs.send("service_9f2k6kd", "template_a444dcs", templateParams)
                 .then(() => {
-                    formStatus.textContent = "Message sent! I'll get back to you soon.";
+                    formStatus.textContent = "Message sent!";
                     formStatus.className = "form-success";
                     contactForm.reset();
                     submitBtn.textContent = "Send Message →";
