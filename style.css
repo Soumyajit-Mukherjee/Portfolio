@@ -1,15 +1,5 @@
-/*
-  ╔══════════════════════════════════════════════════════════════╗
-  ║  TAILWIND INTEGRATION — add this ONE line inside <head>:     ║
-  ║  <script src="https://cdn.tailwindcss.com"></script>         ║
-  ╚══════════════════════════════════════════════════════════════╝
-*/
-
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ==========================================
-   DESIGN TOKENS
-   ========================================== */
 :root {
     --cyan: #00ffff;
     --cyan-dim: rgba(0, 255, 255, 0.55);
@@ -254,7 +244,7 @@ body.light-mode .contact-form form textarea {
 }
 
 /* ==========================================
-   BUTTONS — enhanced
+   BUTTONS
    ========================================== */
 .btn-box {
     display: inline-block;
@@ -306,7 +296,7 @@ body.light-mode .contact-form form textarea {
 }
 
 /* ==========================================
-   HEADER / NAVIGATION — refined
+   HEADER / NAVIGATION
    ========================================== */
 .header {
     background: rgba(4, 13, 20, 0.82);
@@ -1357,7 +1347,7 @@ body.light-mode .specialty-card:hover {
 }
 
 /* ==========================================
-   PORTFOLIO SECTION
+   PROJECT SECTION
    ========================================== */
 #portfolio {
     padding: 100px 8% 80px;
@@ -2187,13 +2177,6 @@ body.light-mode .btn-download:hover {
     box-shadow: 0 0 14px rgba(0, 255, 255, .4);
 }
 
-/* ==========================================
-   TAILWIND UTILITY AUGMENTATIONS
-   — These selectors work whether or not you add
-     Tailwind classes in your HTML.
-   ========================================== */
-
-/* Glass card helper (can use as Tailwind @apply target) */
 .tw-glass {
     background: var(--glass);
     border: 1px solid var(--glass-border);
@@ -2222,9 +2205,7 @@ body.light-mode .btn-download:hover {
     box-shadow: 0 0 20px rgba(0, 255, 255, .1), inset 0 0 20px rgba(0, 255, 255, .03);
 }
 
-/* ==========================================
-   RESPONSIVE
-   ========================================== */
+
 @media (max-width: 1100px) {
     .home {
         padding: 90px 5% 0;
