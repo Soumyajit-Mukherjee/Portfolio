@@ -1,7 +1,18 @@
+/*
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  TAILWIND INTEGRATION — add this ONE line inside <head>:     ║
+  ║  <script src="https://cdn.tailwindcss.com"></script>         ║
+  ╚══════════════════════════════════════════════════════════════╝
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* ==========================================
+   DESIGN TOKENS
+   ========================================== */
 :root {
     --cyan: #00ffff;
+    --cyan-dim: rgba(0, 255, 255, 0.55);
     --magenta: #ff0077;
     --yellow: #ffe600;
     --green: #39FF14;
@@ -9,13 +20,35 @@
     --bg-mid: #081b29;
     --bg-surface: rgba(255, 255, 255, 0.03);
     --glass: rgba(0, 255, 255, 0.05);
+    --glass-hover: rgba(0, 255, 255, 0.09);
     --glass-border: rgba(0, 255, 255, 0.15);
+    --glass-border-hover: rgba(0, 255, 255, 0.35);
     --text-primary: #e8f4fd;
     --text-muted: #7a9bb5;
     --header-h: 76px;
+
+    /* Glow palette */
+    --glow-cyan: 0 0 18px rgba(0, 255, 255, .45), 0 0 60px rgba(0, 255, 255, .15);
+    --glow-cyan-lg: 0 0 30px rgba(0, 255, 255, .65), 0 0 90px rgba(0, 255, 255, .25);
+    --glow-magenta: 0 0 20px rgba(255, 0, 119, .4), 0 0 60px rgba(255, 0, 119, .12);
+    --glow-green: 0 0 18px rgba(57, 255, 20, .4), 0 0 50px rgba(57, 255, 20, .1);
+
+    /* Card surfaces */
+    --card-bg: rgba(10, 20, 30, 0.75);
+    --card-border: rgba(255, 255, 255, 0.06);
+
+    /* Transition standard */
+    --t-fast: 0.2s ease;
+    --t-std: 0.35s ease;
+    --t-slow: 0.55s ease;
 }
 
-* {
+/* ==========================================
+   RESET
+   ========================================== */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -35,10 +68,12 @@ body {
     transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* ---- SCROLLBAR ---- */
+/* ==========================================
+   SCROLLBAR
+   ========================================== */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     background: var(--bg-deep);
 }
 
@@ -47,12 +82,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--cyan);
+    background: linear-gradient(180deg, var(--cyan), var(--magenta));
     border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #00cccc;
+    background: var(--cyan);
 }
 
 ::-webkit-scrollbar-corner {
@@ -81,10 +116,23 @@ body::before {
     inset: 0;
     z-index: -1;
     background-image:
-        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
+        linear-gradient(rgba(0, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
     pointer-events: none;
+}
+
+/* Ambient corner glow */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 0, 119, .06) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: -1;
 }
 
 /* Make all main sections transparent */
@@ -94,6 +142,7 @@ body::before {
 #portfolio,
 .certifications,
 .recources,
+.resources,
 .contact {
     background: transparent !important;
 }
@@ -104,15 +153,21 @@ body::before {
 body.light-mode {
     --text-primary: #0d1f2d;
     --text-muted: #4a6880;
-    --bg-surface: rgba(0, 0, 0, 0.03);
-    --glass: rgba(0, 200, 220, 0.06);
-    --glass-border: rgba(0, 150, 200, 0.2);
+    --bg-surface: rgba(0, 0, 0, .03);
+    --glass: rgba(0, 200, 220, .06);
+    --glass-hover: rgba(0, 200, 220, .1);
+    --glass-border: rgba(0, 150, 200, .2);
+    --glass-border-hover: rgba(0, 150, 200, .4);
+    --card-bg: rgba(255, 255, 255, .85);
+    --card-border: rgba(0, 150, 200, .12);
     background-color: #f0f4f8;
     color: #0d1f2d;
 }
 
 body.light-mode::before {
-    background-image: linear-gradient(rgba(0, 150, 200, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 150, 200, 0.04) 1px, transparent 1px);
+    background-image:
+        linear-gradient(rgba(0, 150, 200, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 150, 200, .035) 1px, transparent 1px);
 }
 
 body.light-mode #star-canvas {
@@ -134,8 +189,8 @@ body.light-mode span {
 }
 
 body.light-mode .header {
-    background: rgba(240, 244, 248, 0.95);
-    border-bottom: 1px solid rgba(0, 150, 200, 0.2);
+    background: rgba(240, 244, 248, .95);
+    border-bottom: 1px solid rgba(0, 150, 200, .2);
 }
 
 body.light-mode .navbar a {
@@ -149,12 +204,12 @@ body.light-mode .navbar a:hover {
 
 body.light-mode .navbar {
     background: #f0f4f8;
-    border-top: 1px solid rgba(0, 150, 200, 0.2);
+    border-top: 1px solid rgba(0, 150, 200, .2);
 }
 
 body.light-mode .nav-clock-pill {
-    background: rgba(0, 0, 0, 0.06);
-    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, .06);
+    border-color: rgba(0, 0, 0, .12);
     color: #2d4a5e;
 }
 
@@ -168,18 +223,18 @@ body.light-mode #portfolio .main-text h2 span:first-child {
 }
 
 body.light-mode .portfolio-content .row {
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, .8);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .12);
 }
 
 body.light-mode .skill-card {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, .7);
 }
 
 body.light-mode .contact-form form input,
 body.light-mode .contact-form form textarea {
-    background: rgba(255, 255, 255, 0.7);
-    border-color: rgba(0, 150, 200, 0.25);
+    background: rgba(255, 255, 255, .7);
+    border-color: rgba(0, 150, 200, .25);
     color: #0d1f2d;
 }
 
@@ -191,14 +246,19 @@ body.light-mode .contact-form form textarea {
     color: var(--cyan);
     cursor: pointer;
     display: none;
+    transition: color var(--t-fast), text-shadow var(--t-fast);
+}
+
+#menu-icon:hover {
+    text-shadow: var(--glow-cyan);
 }
 
 /* ==========================================
-   BUTTONS
+   BUTTONS — enhanced
    ========================================== */
 .btn-box {
     display: inline-block;
-    padding: 13px 32px;
+    padding: 13px 34px;
     background: var(--cyan);
     border: 2px solid var(--cyan);
     border-radius: 50px;
@@ -208,30 +268,31 @@ body.light-mode .contact-form form textarea {
     font-family: 'Syne', sans-serif;
     font-size: 15px;
     font-weight: 700;
-    transition: all 0.35s ease;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.35), 0 0 60px rgba(0, 255, 255, 0.1);
+    transition: all var(--t-std);
+    box-shadow: var(--glow-cyan);
     position: relative;
     overflow: hidden;
 }
 
+/* Shimmer sweep */
 .btn-box::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
-    transform: translateX(-100%);
-    transition: transform 0.5s ease;
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .22) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.6s ease;
 }
 
 .btn-box:hover::before {
-    transform: translateX(100%);
+    transform: translateX(120%);
 }
 
 .btn-box:hover {
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.7), 0 0 80px rgba(0, 255, 255, 0.3);
+    box-shadow: var(--glow-cyan-lg);
     background: transparent;
     color: var(--cyan);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
 .btn-outline {
@@ -245,13 +306,13 @@ body.light-mode .contact-form form textarea {
 }
 
 /* ==========================================
-   HEADER / NAVIGATION
+   HEADER / NAVIGATION — refined
    ========================================== */
 .header {
-    background: rgba(4, 13, 20, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(0, 255, 255, 0.08);
+    background: rgba(4, 13, 20, 0.82);
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.07);
     position: fixed;
     top: 0;
     left: 0;
@@ -262,6 +323,32 @@ body.light-mode .contact-form form textarea {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    /* Thin top accent line */
+    box-shadow: 0 1px 0 0 rgba(0, 255, 255, 0.06), 0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Animated rainbow top border */
+.header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--magenta), var(--yellow), var(--green), var(--cyan));
+    background-size: 300% 100%;
+    animation: headerGradient 6s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes headerGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 300% 50%;
+    }
 }
 
 .logo {
@@ -273,7 +360,12 @@ body.light-mode .contact-form form textarea {
     letter-spacing: 1px;
     opacity: 0;
     animation: slideRight 1s forwards;
-    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    text-shadow: 0 0 24px rgba(0, 255, 255, .55), 0 0 60px rgba(0, 255, 255, .2);
+    transition: letter-spacing var(--t-std);
+}
+
+.logo:hover {
+    letter-spacing: 2.5px;
 }
 
 .navbar {
@@ -288,9 +380,9 @@ body.light-mode .contact-form form textarea {
     font-size: 15px;
     font-weight: 500;
     padding: 6px 16px;
-    border-radius: 6px;
+    border-radius: 8px;
     letter-spacing: 0.3px;
-    transition: all 0.25s ease;
+    transition: all var(--t-fast);
     opacity: 0;
     animation: slideTop .5s ease forwards;
     animation-delay: calc(0.15s * var(--i));
@@ -307,18 +399,19 @@ body.light-mode .contact-form form textarea {
     height: 2px;
     background: var(--cyan);
     border-radius: 1px;
-    transition: width 0.3s ease;
-    box-shadow: 0 0 8px var(--cyan);
+    transition: width var(--t-std);
+    box-shadow: 0 0 10px var(--cyan);
 }
 
 .navbar a:hover::after,
 .navbar a.active::after {
-    width: 60%;
+    width: 65%;
 }
 
 .navbar a:hover {
     color: var(--cyan);
-    background: rgba(0, 255, 255, 0.05);
+    background: rgba(0, 255, 255, 0.07);
+    transform: translateY(-1px);
 }
 
 .nav-utils {
@@ -342,6 +435,12 @@ body.light-mode .contact-form form textarea {
     font-size: 13px;
     color: var(--cyan);
     letter-spacing: 0.5px;
+    transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.nav-clock-pill:hover {
+    background: rgba(0, 255, 255, 0.12);
+    border-color: rgba(0, 255, 255, 0.35);
 }
 
 .clock-icon {
@@ -370,18 +469,19 @@ body.light-mode .contact-form form textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all var(--t-std);
 }
 
 .theme-toggle:hover {
-    background: rgba(0, 255, 255, 0.1);
+    background: rgba(0, 255, 255, 0.12);
     border-color: var(--cyan);
+    box-shadow: 0 0 16px rgba(0, 255, 255, 0.3);
+    transform: rotate(15deg);
 }
 
 /* ==========================================
-   CONTACT FORM
+   CONTACT FORM STATUS
    ========================================== */
-
 #form-status {
     text-align: center;
     font-size: 14px;
@@ -391,14 +491,16 @@ body.light-mode .contact-form form textarea {
 
 #form-status.form-success {
     color: #39FF14;
+    text-shadow: var(--glow-green);
 }
 
 #form-status.form-error {
     color: #ff0077;
+    text-shadow: var(--glow-magenta);
 }
 
 #submit-btn:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none !important;
@@ -418,21 +520,34 @@ body.light-mode .contact-form form textarea {
     gap: 4rem;
 }
 
-/* Decorative gradient blob */
+/* Ambient blob */
 .home::after {
     content: '';
     position: absolute;
     right: 5%;
     top: 30%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(0, 255, 255, 0.06) 0%, transparent 70%);
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.07) 0%, transparent 68%);
     pointer-events: none;
     border-radius: 50%;
 }
 
+.home::before {
+    content: '';
+    position: absolute;
+    left: 2%;
+    top: 15%;
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, rgba(255, 0, 119, 0.05) 0%, transparent 65%);
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 0;
+}
+
 .home-content {
-    max-width: 580px;
+    max-width: 590px;
     z-index: 1;
 }
 
@@ -451,12 +566,12 @@ body.light-mode .contact-form form textarea {
 
 .home-content h1 {
     font-family: 'Syne', sans-serif;
-    font-size: 52px;
+    font-size: 54px;
     font-weight: 800;
     line-height: 1.1;
     margin: 8px 0 16px;
     opacity: 0;
-    animation: slideBottom 1s ease forwards, colorBlink 5s infinite;
+    animation: slideBottom 1s ease forwards, colorBlink 6s infinite;
     animation-delay: 0.8s, 2s;
     letter-spacing: -1px;
 }
@@ -475,17 +590,18 @@ body.light-mode .contact-form form textarea {
 
 .text {
     color: var(--cyan);
-    text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+    text-shadow: 0 0 24px rgba(0, 255, 255, .65);
 }
 
 .home-content p {
     font-size: 17px;
-    line-height: 1.75;
+    line-height: 1.8;
     color: var(--text-muted);
     opacity: 0;
     animation: slideLeft 1s ease forwards;
     animation-delay: 1s;
     margin-bottom: 36px;
+    max-width: 500px;
 }
 
 .home-sci {
@@ -499,24 +615,40 @@ body.light-mode .contact-form form textarea {
     color: var(--cyan);
     text-decoration: none;
     font-size: 18px;
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 255, 0.28);
+    border-radius: 12px;
     justify-content: center;
     align-items: center;
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: all var(--t-std);
     animation: slideLeft 1s ease forwards;
     animation-delay: calc(0.15s * var(--i));
+    position: relative;
+    overflow: hidden;
+}
+
+.home-sci a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cyan);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--t-fast);
+    z-index: -1;
+}
+
+.home-sci a:hover::before {
+    transform: scaleY(1);
 }
 
 .home-sci a:hover {
-    background: var(--cyan);
     color: var(--bg-deep);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-    transform: translateY(-3px);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-4px);
     border-color: var(--cyan);
 }
 
@@ -544,16 +676,17 @@ body.light-mode .contact-form form textarea {
     background-size: 300% 300%;
     animation: gradientSpin 4s linear infinite;
     z-index: -1;
+    filter: blur(0.5px);
 }
 
 .img-box::after {
     content: '';
     position: absolute;
-    inset: -20px;
-    border-radius: 40px;
+    inset: -22px;
+    border-radius: 42px;
     background: radial-gradient(circle at center,
-            rgba(0, 255, 255, 0.15) 0%,
-            rgba(255, 0, 119, 0.1) 40%,
+            rgba(0, 255, 255, .18) 0%,
+            rgba(255, 0, 119, .12) 40%,
             transparent 70%);
     z-index: -2;
     animation: shakeUpDown 4s ease-in-out infinite;
@@ -568,14 +701,14 @@ body.light-mode .contact-form form textarea {
     animation: shakeUpDown 4s ease-in-out infinite;
 }
 
-/* Corner accent dots */
 .img-box .corner {
     position: absolute;
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background: var(--cyan);
-    box-shadow: 0 0 10px var(--cyan);
+    box-shadow: 0 0 14px var(--cyan);
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .img-box .corner:nth-child(2) {
@@ -587,21 +720,38 @@ body.light-mode .contact-form form textarea {
     top: -6px;
     right: -6px;
     background: var(--magenta);
-    box-shadow: 0 0 10px var(--magenta);
+    box-shadow: 0 0 14px var(--magenta);
+    animation-delay: 0.5s;
 }
 
 .img-box .corner:nth-child(4) {
     bottom: -6px;
     left: -6px;
     background: var(--yellow);
-    box-shadow: 0 0 10px var(--yellow);
+    box-shadow: 0 0 14px var(--yellow);
+    animation-delay: 1s;
 }
 
 .img-box .corner:nth-child(5) {
     bottom: -6px;
     right: -6px;
     background: var(--green);
-    box-shadow: 0 0 10px var(--green);
+    box-shadow: 0 0 14px var(--green);
+    animation-delay: 1.5s;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+    }
 }
 
 /* ==========================================
@@ -615,6 +765,19 @@ body.light-mode .contact-form form textarea {
     justify-content: center;
     gap: 3rem;
     background: transparent !important;
+    position: relative;
+}
+
+.about::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(255, 0, 119, .07) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .about-header {
@@ -672,16 +835,19 @@ body.light-mode .contact-form form textarea {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
     padding: 16px 18px;
-    transition: border-color 0.3s, background 0.3s;
+    transition: border-color var(--t-std), background var(--t-std), transform var(--t-std);
+    backdrop-filter: blur(12px);
 }
 
 .info-card:hover {
-    border-color: rgba(0, 255, 255, 0.2);
-    background: rgba(0, 255, 255, 0.04);
+    border-color: var(--glass-border-hover);
+    background: var(--glass-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .3), 0 0 20px rgba(0, 255, 255, .06);
 }
 
 .info-card i {
@@ -705,7 +871,7 @@ body.light-mode .contact-form form textarea {
     font-family: 'Syne', sans-serif;
 }
 
-/* Specialty cards (right column) */
+/* Specialty cards */
 .about-right {
     display: flex;
     flex-direction: column;
@@ -716,28 +882,55 @@ body.light-mode .contact-form form textarea {
     display: flex;
     align-items: center;
     gap: 18px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
     padding: 18px 22px;
-    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    transition: border-color var(--t-std), background var(--t-std), transform var(--t-std), box-shadow var(--t-std);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Left accent strip */
+.specialty-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity var(--t-std);
+    border-radius: 3px 0 0 3px;
+}
+
+.specialty-card:hover::before {
+    opacity: 1;
 }
 
 .specialty-card:hover {
-    border-color: rgba(0, 255, 255, 0.25);
-    background: rgba(0, 255, 255, 0.04);
-    transform: translateX(6px);
+    border-color: rgba(0, 255, 255, .28);
+    background: rgba(0, 255, 255, 0.05);
+    transform: translateX(8px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .3), -4px 0 24px rgba(0, 255, 255, .06);
 }
 
 .specialty-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    background: rgba(0, 255, 255, 0.12);
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    background: rgba(0, 255, 255, .12);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: transform var(--t-std);
+}
+
+.specialty-card:hover .specialty-icon {
+    transform: scale(1.1) rotate(-6deg);
 }
 
 .specialty-icon i {
@@ -746,7 +939,7 @@ body.light-mode .contact-form form textarea {
 }
 
 .specialty-icon.pink {
-    background: rgba(255, 0, 119, 0.12);
+    background: rgba(255, 0, 119, .12);
 }
 
 .specialty-icon.pink i {
@@ -754,7 +947,7 @@ body.light-mode .contact-form form textarea {
 }
 
 .specialty-icon.amber {
-    background: rgba(255, 230, 0, 0.1);
+    background: rgba(255, 230, 0, .1);
 }
 
 .specialty-icon.amber i {
@@ -762,7 +955,7 @@ body.light-mode .contact-form form textarea {
 }
 
 .specialty-icon.teal {
-    background: rgba(57, 255, 20, 0.1);
+    background: rgba(57, 255, 20, .1);
 }
 
 .specialty-icon.teal i {
@@ -787,53 +980,11 @@ body.light-mode .contact-form form textarea {
     font-family: 'Syne', sans-serif;
 }
 
-/* Light mode overrides */
-body.light-mode .info-card,
-body.light-mode .specialty-card {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(0, 150, 200, 0.15);
+/* Legacy .about layout */
+.img-box2 {
+    position: relative;
+    flex-shrink: 0;
 }
-
-body.light-mode .info-card:hover,
-body.light-mode .specialty-card:hover {
-    border-color: rgba(0, 150, 200, 0.35);
-    background: rgba(0, 200, 220, 0.06);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-    .about-body {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-    }
-
-    .about-title {
-        font-size: 38px;
-    }
-}
-
-@media (max-width: 480px) {
-    .about-info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .about-title {
-        font-size: 30px;
-    }
-}
-
-.about::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255, 0, 119, 0.07) 0%, transparent 70%);
-    pointer-events: none;
-}
-
 
 .img-box2::before {
     content: '';
@@ -844,6 +995,7 @@ body.light-mode .specialty-card:hover {
     background-size: 300% 300%;
     animation: gradientSpin 5s linear infinite reverse;
     z-index: -1;
+    filter: blur(0.5px);
 }
 
 .img-box2 img {
@@ -854,7 +1006,6 @@ body.light-mode .specialty-card:hover {
     display: block;
     animation: shakeUpDown 4s ease-in-out infinite;
 }
-
 
 .about-text h2 {
     font-family: 'Syne', sans-serif;
@@ -875,8 +1026,8 @@ body.light-mode .specialty-card:hover {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 255, 255, 0.07);
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    background: rgba(0, 255, 255, .07);
+    border: 1px solid rgba(0, 255, 255, .22);
     border-radius: 50px;
     padding: 6px 16px;
     font-size: 13px;
@@ -887,12 +1038,19 @@ body.light-mode .specialty-card:hover {
     opacity: 0;
     animation: slideLeft 1s ease forwards;
     animation-delay: 1s;
+    transition: background var(--t-fast), box-shadow var(--t-fast);
+}
+
+.about-badge:hover {
+    background: rgba(0, 255, 255, .12);
+    box-shadow: var(--glow-cyan);
 }
 
 .about-badge::before {
     content: '●';
     font-size: 8px;
     color: var(--green);
+    animation: pulse 1.8s ease-in-out infinite;
 }
 
 .about-text h4 {
@@ -913,6 +1071,20 @@ body.light-mode .specialty-card:hover {
     opacity: 0;
     animation: slideBottom 1s ease forwards;
     animation-delay: 1.2s;
+}
+
+/* Light mode about overrides */
+body.light-mode .info-card,
+body.light-mode .specialty-card {
+    background: rgba(255, 255, 255, .85);
+    border-color: rgba(0, 150, 200, .15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
+}
+
+body.light-mode .info-card:hover,
+body.light-mode .specialty-card:hover {
+    border-color: rgba(0, 150, 200, .35);
+    background: rgba(0, 200, 220, .06);
 }
 
 /* ==========================================
@@ -941,23 +1113,44 @@ body.light-mode .specialty-card:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 4rem;
+    gap: 3.5rem;
 }
 
 .skills-column {
     flex: 1;
     min-width: 300px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
     padding: 40px 36px;
-    backdrop-filter: blur(10px);
-    transition: border-color 0.3s, box-shadow 0.3s;
+    backdrop-filter: blur(14px);
+    transition: border-color var(--t-std), box-shadow var(--t-std), transform var(--t-std);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Top accent glow on hover */
+.skills-column::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.5s ease;
+}
+
+.skills-column:hover::before {
+    transform: scaleX(1);
 }
 
 .skills-column:hover {
-    border-color: rgba(0, 255, 255, 0.3);
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.05);
+    border-color: rgba(0, 255, 255, .28);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .35), 0 0 40px rgba(0, 255, 255, .06);
+    transform: translateY(-4px);
 }
 
 .headings1 {
@@ -968,7 +1161,7 @@ body.light-mode .specialty-card:hover {
     letter-spacing: 0.5px;
     margin-bottom: 40px;
     padding-bottom: 16px;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(0, 255, 255, .12);
     position: relative;
 }
 
@@ -978,11 +1171,16 @@ body.light-mode .specialty-card:hover {
     bottom: -1px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
+    width: 70px;
     height: 2px;
     background: var(--cyan);
-    box-shadow: 0 0 10px var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
     border-radius: 1px;
+    transition: width var(--t-std);
+}
+
+.skills-column:hover .headings1::after {
+    width: 110px;
 }
 
 /* Technical Bars */
@@ -1015,23 +1213,43 @@ body.light-mode .specialty-card:hover {
 .Technical-bars .progress-line {
     position: relative;
     width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.06);
+    height: 7px;
+    background: rgba(255, 255, 255, .06);
     border-radius: 999px;
     overflow: hidden;
+}
+
+/* Animated shimmer on the track */
+.Technical-bars .progress-line::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .04), transparent);
+    animation: shimmer 2.4s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .Technical-bars .progress-line span {
     position: absolute;
     height: 100%;
-    background: linear-gradient(90deg, var(--cyan), rgba(0, 255, 255, 0.6));
+    background: linear-gradient(90deg, var(--cyan), rgba(0, 255, 255, .55));
     border-radius: 999px;
     left: 0;
     width: 0;
-    transition: width 1.8s cubic-bezier(0.1, 0.2, 0.2, 1);
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+    transition: width 2s cubic-bezier(0.1, 0.2, 0.2, 1);
+    box-shadow: 0 0 14px rgba(0, 255, 255, .65);
 }
 
+/* Skill bar widths */
 .skills.show-animate .progress-line.html span {
     width: 90%;
 }
@@ -1066,13 +1284,23 @@ body.light-mode .specialty-card:hover {
     flex-direction: column;
     align-items: center;
     position: relative;
+    transition: transform var(--t-std);
+}
+
+.radial-bars:hover {
+    transform: scale(1.04);
 }
 
 .radial-bars svg {
     width: 140px;
     height: 140px;
     transform: rotate(-90deg);
-    filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.3));
+    filter: drop-shadow(0 0 10px rgba(0, 255, 255, .35));
+    transition: filter var(--t-std);
+}
+
+.radial-bars:hover svg {
+    filter: drop-shadow(0 0 18px rgba(0, 255, 255, .55));
 }
 
 .radial-bars circle {
@@ -1081,7 +1309,7 @@ body.light-mode .specialty-card:hover {
 }
 
 .bg-bar {
-    stroke: rgba(255, 255, 255, 0.06);
+    stroke: rgba(255, 255, 255, .06);
 }
 
 .path {
@@ -1089,7 +1317,7 @@ body.light-mode .specialty-card:hover {
     stroke-linecap: round;
     stroke-dasharray: 314;
     stroke-dashoffset: 314;
-    transition: stroke-dashoffset 1.8s cubic-bezier(0.1, 0.2, 0.2, 1);
+    transition: stroke-dashoffset 2s cubic-bezier(0.1, 0.2, 0.2, 1);
 }
 
 .skills.show-animate .path-1 {
@@ -1117,6 +1345,7 @@ body.light-mode .specialty-card:hover {
     font-size: 18px;
     font-weight: 600;
     color: var(--cyan);
+    text-shadow: 0 0 16px rgba(0, 255, 255, .5);
 }
 
 .radial-bars .text {
@@ -1160,19 +1389,19 @@ body.light-mode .specialty-card:hover {
 
 .row {
     position: relative;
-    border-radius: 18px;
+    border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
     height: 300px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .07);
+    transition: border-color var(--t-slow), box-shadow var(--t-slow), transform var(--t-slow);
 }
 
 .row:hover {
-    border-color: rgba(0, 255, 255, 0.3);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 255, 255, 0.1);
-    transform: translateY(-6px);
+    border-color: rgba(0, 255, 255, .32);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .45), 0 0 50px rgba(0, 255, 255, .12);
+    transform: translateY(-8px);
 }
 
 .row img {
@@ -1180,26 +1409,26 @@ body.light-mode .specialty-card:hover {
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: brightness(35%) saturate(0.8);
-    transition: transform 0.6s ease, filter 0.6s ease;
+    filter: brightness(32%) saturate(0.75);
+    transition: transform 0.7s ease, filter 0.7s ease;
 }
 
 .row:hover img {
-    transform: scale(1.07);
-    filter: brightness(20%) saturate(0.5) blur(2px);
+    transform: scale(1.08);
+    filter: brightness(18%) saturate(0.5) blur(2px);
 }
 
 .layer {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 0%, rgba(4, 13, 20, 0.92) 100%);
+    background: linear-gradient(180deg, transparent 0%, rgba(4, 13, 20, .94) 100%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     padding: 30px;
-    transform: translateY(60px);
+    transform: translateY(65px);
     opacity: 0;
-    transition: transform 0.45s ease, opacity 0.45s ease;
+    transition: transform var(--t-slow), opacity var(--t-slow);
 }
 
 .row:hover .layer {
@@ -1218,13 +1447,13 @@ body.light-mode .specialty-card:hover {
 
 .layer p {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, .7);
     line-height: 1.6;
     text-align: left;
     font-weight: 400;
 }
 
-/* Project tag label */
+/* Project tag */
 .row::before {
     content: 'PROJECT';
     position: absolute;
@@ -1234,11 +1463,17 @@ body.light-mode .specialty-card:hover {
     font-size: 10px;
     letter-spacing: 2px;
     color: var(--cyan);
-    background: rgba(0, 255, 255, 0.1);
-    border: 1px solid rgba(0, 255, 255, 0.25);
-    border-radius: 4px;
-    padding: 3px 8px;
+    background: rgba(0, 255, 255, .1);
+    border: 1px solid rgba(0, 255, 255, .28);
+    border-radius: 5px;
+    padding: 3px 9px;
     z-index: 2;
+    transition: background var(--t-fast), box-shadow var(--t-fast);
+}
+
+.row:hover::before {
+    background: rgba(0, 255, 255, .18);
+    box-shadow: 0 0 10px rgba(0, 255, 255, .25);
 }
 
 /* ==========================================
@@ -1259,64 +1494,81 @@ body.light-mode .specialty-card:hover {
 }
 
 .certification-card {
-    background: rgba(16, 22, 30, 0.7);
-    /* Deep dark background */
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
     padding: 32px 28px;
     text-align: left;
-    transition: border-color 0.3s, background 0.3s, transform 0.3s;
-    backdrop-filter: blur(10px);
+    transition: border-color var(--t-std), background var(--t-std), transform var(--t-std), box-shadow var(--t-std);
+    backdrop-filter: blur(14px);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover shimmer gradient */
+.certification-card::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -60%;
+    right: -60%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, .35), transparent);
+    transition: top var(--t-slow);
+}
+
+.certification-card:hover::after {
+    top: 0;
 }
 
 .certification-card:hover {
-    border-color: rgba(0, 255, 255, 0.25);
-    background: rgba(20, 28, 38, 0.9);
-    transform: translateY(-6px);
+    border-color: rgba(0, 255, 255, .28);
+    background: rgba(15, 25, 38, .92);
+    transform: translateY(-7px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .4), 0 0 35px rgba(0, 255, 255, .07);
 }
 
-/* Icon Box Styling */
 .cert-icon-box {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
+    width: 54px;
+    height: 54px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 24px;
     font-size: 26px;
+    transition: transform var(--t-std);
 }
 
-/* Custom Icon Colors matching the image */
+.certification-card:hover .cert-icon-box {
+    transform: scale(1.12) rotate(-8deg);
+}
+
 .cert-icon-box.purple {
-    background: rgba(56, 43, 89, 0.8);
+    background: rgba(56, 43, 89, .8);
     color: #ffd166;
-    /* Trophy Gold */
 }
 
 .cert-icon-box.green {
-    background: rgba(23, 61, 52, 0.8);
+    background: rgba(23, 61, 52, .8);
     color: #f8f9fa;
-    /* Cloud White */
 }
 
 .cert-icon-box.red {
-    background: rgba(82, 37, 47, 0.8);
+    background: rgba(82, 37, 47, .8);
     color: #a2d2ff;
-    /* Laptop Blueish-white */
 }
 
 .cert-icon-box.cyan {
-    background: rgba(0, 255, 255, 0.1);
+    background: rgba(0, 255, 255, .1);
     color: var(--cyan);
 }
 
 .cert-icon-box.yellow {
-    background: rgba(255, 230, 0, 0.1);
+    background: rgba(255, 230, 0, .1);
     color: var(--yellow);
 }
 
-/* Text Styling */
 .certification-card h3 {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 20px;
@@ -1333,15 +1585,16 @@ body.light-mode .specialty-card:hover {
     font-weight: 400;
 }
 
-/* Light mode overrides for the cards */
+/* Light mode overrides */
 body.light-mode .certification-card {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(0, 150, 200, 0.15);
+    background: rgba(255, 255, 255, .85);
+    border-color: rgba(0, 150, 200, .15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
 }
 
 body.light-mode .certification-card:hover {
-    background: rgba(0, 200, 220, 0.06);
-    border-color: rgba(0, 150, 200, 0.35);
+    background: rgba(0, 200, 220, .06);
+    border-color: rgba(0, 150, 200, .35);
 }
 
 /* ==========================================
@@ -1362,79 +1615,110 @@ body.light-mode .certification-card:hover {
 }
 
 .resource-card {
-    background: rgba(16, 22, 30, 0.7);
-    /* Deep dark background matching certs */
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
     padding: 32px 28px;
     text-align: left;
-    transition: border-color 0.3s, background 0.3s, transform 0.3s;
-    backdrop-filter: blur(10px);
+    transition: border-color var(--t-std), background var(--t-std), transform var(--t-std), box-shadow var(--t-std);
+    backdrop-filter: blur(14px);
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-card::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -60%;
+    right: -60%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, .3), transparent);
+    transition: top var(--t-slow);
+}
+
+.resource-card:hover::after {
+    top: 0;
 }
 
 .resource-card:hover {
-    border-color: rgba(0, 255, 255, 0.25);
-    background: rgba(20, 28, 38, 0.9);
-    transform: translateY(-6px);
+    border-color: rgba(0, 255, 255, .28);
+    background: rgba(15, 25, 38, .92);
+    transform: translateY(-7px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .4), 0 0 35px rgba(0, 255, 255, .07);
 }
 
 .res-icon-box {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
+    width: 54px;
+    height: 54px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
     font-size: 26px;
+    transition: transform var(--t-std);
 }
 
-/* Unique Icon Colors for each subject */
+.resource-card:hover .res-icon-box {
+    transform: scale(1.12) rotate(-8deg);
+}
+
 .res-icon-box.red {
-    background: rgba(255, 71, 87, 0.15);
+    background: rgba(255, 71, 87, .15);
     color: #ff4757;
 }
 
 .res-icon-box.blue {
-    background: rgba(30, 144, 255, 0.15);
+    background: rgba(30, 144, 255, .15);
     color: #1e90ff;
 }
 
 .res-icon-box.green {
-    background: rgba(46, 213, 115, 0.15);
+    background: rgba(46, 213, 115, .15);
     color: #2ed573;
 }
 
 .res-icon-box.purple {
-    background: rgba(156, 136, 255, 0.15);
+    background: rgba(156, 136, 255, .15);
     color: #9c88ff;
 }
 
 .res-icon-box.cyan {
-    background: rgba(0, 210, 211, 0.15);
+    background: rgba(0, 210, 211, .15);
     color: #00d2d1;
 }
 
 .res-icon-box.yellow {
-    background: rgba(255, 165, 2, 0.15);
+    background: rgba(255, 165, 2, .15);
     color: #ffa502;
 }
 
 .res-icon-box.orange {
-    background: rgba(255, 127, 80, 0.15);
+    background: rgba(255, 127, 80, .15);
     color: #ff7f50;
 }
 
 .res-icon-box.pink {
-    background: rgba(255, 105, 180, 0.15);
+    background: rgba(255, 105, 180, .15);
     color: #ff69b4;
 }
 
 .res-icon-box.emerald {
-    background: rgba(0, 255, 127, 0.15);
+    background: rgba(0, 255, 127, .15);
     color: #00ff7f;
+}
+
+.res-icon-box.teal {
+    background: rgba(0, 255, 204, .15);
+    color: #00ffcc;
+}
+
+.res-icon-box.indigo {
+    background: rgba(102, 51, 255, .15);
+    color: #6633ff;
 }
 
 .resource-card h3 {
@@ -1452,67 +1736,68 @@ body.light-mode .certification-card:hover {
     line-height: 1.6;
     margin-bottom: 24px;
     flex-grow: 1;
-    /* Pushes the button to the bottom */
 }
 
-/* Download Button Styling */
 .btn-download {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     padding: 12px 20px;
-    background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    border-radius: 8px;
+    background: rgba(0, 255, 255, .05);
+    border: 1px solid rgba(0, 255, 255, .22);
+    border-radius: 10px;
     color: var(--cyan);
     text-decoration: none;
     font-family: 'Space Grotesk', sans-serif;
     font-size: 14px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all var(--t-std);
     margin-top: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-download::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cyan);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--t-fast);
+    z-index: -1;
+}
+
+.btn-download:hover::before {
+    transform: scaleY(1);
 }
 
 .btn-download:hover {
-    background: var(--cyan);
     color: var(--bg-deep);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 18px rgba(0, 255, 255, .35);
+    border-color: var(--cyan);
 }
 
-/* Light mode overrides */
 body.light-mode .resource-card {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(0, 150, 200, 0.15);
+    background: rgba(255, 255, 255, .85);
+    border-color: rgba(0, 150, 200, .15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
 }
 
 body.light-mode .resource-card:hover {
-    background: rgba(0, 200, 220, 0.06);
-    border-color: rgba(0, 150, 200, 0.35);
+    background: rgba(0, 200, 220, .06);
+    border-color: rgba(0, 150, 200, .35);
 }
 
 body.light-mode .btn-download {
-    border-color: rgba(0, 150, 200, 0.3);
+    border-color: rgba(0, 150, 200, .3);
     color: #0d1f2d;
 }
 
 body.light-mode .btn-download:hover {
-    background: var(--cyan);
     color: white;
 }
-
-.res-icon-box.teal {
-    background: rgba(0, 255, 204, 0.15);
-    color: #00ffcc;
-}
-
-.res-icon-box.indigo {
-    background: rgba(102, 51, 255, 0.15);
-    color: #6633ff;
-}
-
-
-
 
 /* ==========================================
    CONTACT SECTION
@@ -1572,7 +1857,14 @@ body.light-mode .btn-download:hover {
     padding: 12px 16px;
     background: var(--glass);
     border: 1px solid var(--glass-border);
-    border-radius: 10px;
+    border-radius: 12px;
+    transition: border-color var(--t-fast), background var(--t-fast), transform var(--t-fast);
+}
+
+.contact-list li:hover {
+    border-color: var(--glass-border-hover);
+    background: rgba(0, 255, 255, .07);
+    transform: translateX(5px);
 }
 
 .contact-list i {
@@ -1591,22 +1883,38 @@ body.light-mode .btn-download:hover {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 42px;
-    height: 42px;
-    background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.25);
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 255, 255, .05);
+    border: 1px solid rgba(0, 255, 255, .25);
+    border-radius: 12px;
     font-size: 18px;
     color: var(--cyan);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all var(--t-std);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact_icons a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cyan);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--t-fast);
+    z-index: -1;
+}
+
+.contact_icons a:hover::before {
+    transform: scaleY(1);
 }
 
 .contact_icons a:hover {
-    background: var(--cyan);
     color: var(--bg-deep);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-    transform: translateY(-3px);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-4px);
     border-color: var(--cyan);
 }
 
@@ -1617,28 +1925,40 @@ body.light-mode .btn-download:hover {
     gap: 14px;
     background: var(--glass);
     border: 1px solid var(--glass-border);
-    border-radius: 20px;
+    border-radius: 22px;
     padding: 36px;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 16px 60px rgba(0, 0, 0, .3);
+    transition: box-shadow var(--t-std);
+}
+
+.contact-form form:focus-within {
+    box-shadow: 0 20px 80px rgba(0, 0, 0, .35), 0 0 40px rgba(0, 255, 255, .06);
 }
 
 .contact-form form input,
 .contact-form form textarea {
     outline: none;
     padding: 16px 20px;
-    border-radius: 12px;
+    border-radius: 13px;
     color: var(--text-primary);
     font-size: 15px;
     font-family: 'Space Grotesk', sans-serif;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: border-color 0.3s, box-shadow 0.3s;
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(255, 255, 255, .08);
+    transition: border-color var(--t-std), box-shadow var(--t-std), background var(--t-fast);
+}
+
+.contact-form form input:hover,
+.contact-form form textarea:hover {
+    background: rgba(255, 255, 255, .06);
 }
 
 .contact-form form input:focus,
 .contact-form form textarea:focus {
-    border-color: rgba(0, 255, 255, 0.4);
-    box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.08);
+    border-color: rgba(0, 255, 255, .45);
+    box-shadow: 0 0 0 3px rgba(0, 255, 255, .09), 0 0 16px rgba(0, 255, 255, .06);
+    background: rgba(0, 255, 255, .03);
 }
 
 .contact-form form textarea {
@@ -1648,7 +1968,7 @@ body.light-mode .btn-download:hover {
 
 .contact-form form input::placeholder,
 .contact-form form textarea::placeholder {
-    color: rgba(122, 155, 181, 0.6);
+    color: rgba(122, 155, 181, .55);
     font-size: 14px;
 }
 
@@ -1660,11 +1980,20 @@ body.light-mode .btn-download:hover {
     cursor: pointer;
     text-align: center;
     padding: 16px;
-    border-radius: 12px;
+    border-radius: 13px;
     border: none;
     width: 100%;
     font-family: 'Syne', sans-serif;
     letter-spacing: 0.5px;
+    box-shadow: 0 0 24px rgba(0, 255, 255, .35);
+    transition: all var(--t-std);
+}
+
+.contact-form form .btn-box:hover {
+    background: transparent;
+    color: var(--cyan);
+    border: 2px solid var(--cyan);
+    box-shadow: var(--glow-cyan-lg);
 }
 
 /* ==========================================
@@ -1672,10 +2001,21 @@ body.light-mode .btn-download:hover {
    ========================================== */
 .footer {
     text-align: center;
-    padding: 28px 8%;
-    background: rgba(4, 13, 20, 0.9);
-    border-top: 1px solid rgba(0, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
+    padding: 32px 8%;
+    background: rgba(4, 13, 20, .92);
+    border-top: 1px solid rgba(0, 255, 255, .07);
+    backdrop-filter: blur(12px);
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, .2), transparent);
 }
 
 .footer p {
@@ -1699,14 +2039,14 @@ body.light-mode .btn-download:hover {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     background: var(--cyan);
-    border-radius: 12px;
+    border-radius: 13px;
     text-decoration: none;
     z-index: 1000;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-    transition: all 0.3s ease;
+    box-shadow: 0 0 24px rgba(0, 255, 255, .5);
+    transition: all var(--t-std);
 }
 
 .scroll-top i {
@@ -1715,8 +2055,8 @@ body.light-mode .btn-download:hover {
 }
 
 .scroll-top:hover {
-    box-shadow: 0 0 35px rgba(0, 255, 255, 0.7);
-    transform: translateY(-4px);
+    box-shadow: var(--glow-cyan-lg);
+    transform: translateY(-5px) rotate(5deg);
 }
 
 /* ==========================================
@@ -1799,28 +2139,87 @@ body.light-mode .btn-download:hover {
 @keyframes colorBlink {
     0% {
         color: #ffffff;
-        text-shadow: 0 0 15px #ffffff;
+        text-shadow: 0 0 15px #fff;
     }
 
     25% {
         color: var(--cyan);
-        text-shadow: 0 0 25px var(--cyan);
+        text-shadow: 0 0 30px var(--cyan);
     }
 
     50% {
         color: var(--green);
-        text-shadow: 0 0 25px var(--green);
+        text-shadow: 0 0 30px var(--green);
     }
 
     75% {
         color: var(--yellow);
-        text-shadow: 0 0 25px var(--yellow);
+        text-shadow: 0 0 30px var(--yellow);
     }
 
     100% {
         color: #ffffff;
-        text-shadow: 0 0 15px #ffffff;
+        text-shadow: 0 0 15px #fff;
     }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================
+   SECTION DIVIDER (aesthetic utility)
+   ========================================== */
+.section-divider {
+    width: 80px;
+    height: 3px;
+    margin: 0 auto 16px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 14px rgba(0, 255, 255, .4);
+}
+
+/* ==========================================
+   TAILWIND UTILITY AUGMENTATIONS
+   — These selectors work whether or not you add
+     Tailwind classes in your HTML.
+   ========================================== */
+
+/* Glass card helper (can use as Tailwind @apply target) */
+.tw-glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* Neon text */
+.tw-neon {
+    color: var(--cyan);
+    text-shadow: 0 0 20px rgba(0, 255, 255, .6);
+}
+
+/* Gradient text */
+.tw-gradient-text {
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--magenta) 50%, var(--yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Glowing border */
+.tw-glow-border {
+    border: 1px solid rgba(0, 255, 255, .3);
+    box-shadow: 0 0 20px rgba(0, 255, 255, .1), inset 0 0 20px rgba(0, 255, 255, .03);
 }
 
 /* ==========================================
@@ -1874,6 +2273,15 @@ body.light-mode .btn-download:hover {
     .home {
         gap: 3rem;
     }
+
+    .about-body {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .about-title {
+        font-size: 38px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1909,33 +2317,21 @@ body.light-mode .btn-download:hover {
         top: 100%;
         left: 0;
         width: 100%;
-        background: rgba(4, 13, 20, 0.97);
-        backdrop-filter: blur(20px);
+        background: rgba(4, 13, 20, .97);
+        backdrop-filter: blur(24px);
         padding: 1.5rem 5%;
-        border-top: 1px solid rgba(0, 255, 255, 0.1);
+        border-top: 1px solid rgba(0, 255, 255, .1);
         display: none;
         flex-direction: column;
         align-items: center;
         gap: 0.5rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 24px 50px rgba(0, 0, 0, .6);
         z-index: 999;
     }
 
     .navbar.active {
         display: flex;
         animation: fadeIn 0.35s ease;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
     }
 
     .navbar a {
@@ -2007,6 +2403,14 @@ body.light-mode .btn-download:hover {
         margin: 18px auto;
     }
 
+    .about-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-title {
+        font-size: 30px;
+    }
+
     .contact_icons {
         justify-content: center;
     }
@@ -2071,10 +2475,7 @@ body.light-mode .btn-download:hover {
         text-align: center;
     }
 
-    .contact-text h4 {
-        text-align: center;
-    }
-
+    .contact-text h4,
     .contact-text p {
         text-align: center;
     }
@@ -2090,8 +2491,8 @@ body.light-mode .btn-download:hover {
     .scroll-top {
         bottom: 16px;
         right: 16px;
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
     }
 }
 
